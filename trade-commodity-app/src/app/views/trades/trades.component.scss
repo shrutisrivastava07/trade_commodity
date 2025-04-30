@@ -1,0 +1,44 @@
+/* filepath: d:\Personal\Shruti\PersonalRepository\trade_commodity\trade-commodity-app\src\app\views\trades\trades.component.scss */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .responsive-table {
+    width: 100%;
+    table-layout: auto; /* Ensures columns adjust to content */
+  }
+  
+  .mat-header-cell, .mat-cell {
+    text-align: left;
+    padding: 8px;
+    word-wrap: break-word; /* Ensures text wraps within cells */
+  }
+  
+  .status-pill {
+    padding: 4px 8px;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.875rem;
+    text-transform: capitalize;
+  }
+  
+  .status-pill.settled {
+    background-color: #4caf50; /* Green */
+  }
+  
+  .status-pill.placed {
+    background-color: #ff9800; /* Orange */
+  }
+  
+  .status-pill.expired {
+    background-color: #f44336; /* Red */
+  }
+
+  .add-button {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+  }
+  

@@ -1,0 +1,42 @@
+/* filepath: d:\Personal\Shruti\PersonalRepository\trade_commodity\trade-commodity-app\src\app\views\add-trade-dialog\add-trade-dialog.component.scss */
+.dialog-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .trade-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  
+  .cancel-button {
+    color: #757575;
+  }
+  
+  .add-button {
+    background-color: #3f51b5;
+    color: white;
+  }
+  
+  .add-button:hover {
+    background-color: #303f9f;
+  }
