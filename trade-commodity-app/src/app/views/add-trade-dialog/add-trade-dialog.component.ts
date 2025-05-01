@@ -1,58 +1,111 @@
-import { Component } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TradesService } from 'src/app/controllers/trades.service';
+import { TradeModel } from 'src/app/models/trade.model';
 
 @Component({
   selector: 'app-add-trade-dialog',
   templateUrl: './add-trade-dialog.component.html',
 })
-export class AddTradeDialogComponent {
-  tradeForm: FormGroup;
-  commodities: { id: number; code: string }[] = [
-    { id: 1, code: 'TCS' },
-    { id: 2, code: 'REL' },
-    { id: 3, code: 'INFY' },
-  ];
-
-  constructor(
-    private fb: FormBuilder,
-    public dialogRef: MatDialogRef<AddTradeDialogComponent>,
-    private tradeServices: TradesService
+export class AddTradeDialogComponent implements OnInit {
+  // @Input() trade?: {
+    //   id: number;
+    //   commodity: string;
+    //   quantity: number;
+    //   type: string;
+    //   action: string;
+    // }; // Input for the trade object (optional)
+    tradeForm: FormGroup;
+    trade: TradeModel = {} as TradeModel;
+    commodities: { id: number; code: string }[] = [
+      { id: 1, code: 'TCS' },
+      { id: 2, code: 'REL' },
+      { id: 3, code: 'INFY' },
+    ];
+    
+    constructor(
+      private fb: FormBuilder,
+      public dialogRef: MatDialogRef<AddTradeDialogComponent>,
+      private tradeServices: TradesService,
+      @Inject(MAT_DIALOG_DATA) public data: any,
+     
   ) {
     this.tradeForm = this.fb.group({
+      id: [null], // Trade ID (optional)
       commodity: ['', Validators.required],
       quantity: [0, [Validators.required, Validators.min(1)]],
-      // type: ['', [Validators.required, Validators.pattern(/^(INSERT|UPDATE|CANCEL)$/)]], // Added type field with validation
-      // action: ['', [Validators.required, Validators.pattern(/^(BUY|SELL)$/)]], // Added action field with validation
-      type: ['', Validators.required], // Added type field with validation
-      action: ['', Validators.required], // Added action field with validation
-
- 
+      type: ['', Validators.required],
+      action: ['', Validators.required],
     });
   }
 
-  onSubmit() {
-    if (this.tradeForm.valid) {
-      const newTrade = {
-        ...this.tradeForm.value,
-       // totalPrice: this.tradeForm.value.quantity * this.tradeForm.value.price,
-      };
-      this.tradeServices.api
-        .create(newTrade)
-        .then((val) => {
-          console.log('val', val);
-          alert('Trade created successfully');
-          this.dialogRef.close();
-        })
-        .catch((err) => {
-          console.error('Error creating trade:', err);
-          alert('Error creating trade: ' + err.message);
-        });
-    } else {
-      this.showValidationErrors();
+  ngOnInit(): void {
+    if (this.data.trade) {
+      this.trade = this.data.trade;
+      console.log('Trade:', this.trade);
+      this.loadTradeDetails(this.trade);
+      this.enableDisableFields(this.data.action);
     }
   }
+
+  enableDisableFields(action: string) {
+    
+    // this.tradeForm.patchValue({ action });
+    if (action === 'UPDATE' && this.trade) {
+      this.tradeForm.get('action')?.disable();
+     // this.loadTradeDetails(this.trade);
+    } else if (action === 'CANCEL') {
+ 
+     this.tradeForm.get('action')?.disable();
+      this.tradeForm.get('quantity')?.disable();
+      this.tradeForm.get('type')?.disable();
+    } else {
+      this.tradeForm.get('commodity')?.enable();
+      this.tradeForm.get('quantity')?.enable();
+      this.tradeForm.get('type')?.enable();
+    }
+  }
+
+  private loadTradeDetails(trade: TradeModel) { {
+    this.tradeForm.patchValue({
+      id: trade.tradeId,
+      commodity: trade.commodity,
+      quantity: trade.quantity,
+      type: trade.type,
+      action: this.data.action,
+    });
+  }
+}
+
+onSubmit() {
+  if (this.tradeForm.valid) {
+    const updateTrade = {
+      ...this.tradeForm.value,
+      action: this.data.action,
+      tradeId: this.trade.tradeId,
+     transactionId: this.trade.transactionId,
+     tradeVersionId: this.trade.tradeVersionId,
+     // totalPrice: this.tradeForm.value.quantity * this.tradeForm.value.price,
+    };
+    console.log('trade', this.trade);
+    console.log('tradeID', this.trade.tradeId);
+    console.log('updateTrade', updateTrade);
+    this.tradeServices.api
+      .create(updateTrade)
+      .then((val) => {
+        console.log('val', val);
+        alert('Trade created successfully');
+        this.dialogRef.close();
+      })
+      .catch((err) => {
+        console.error('Error creating trade:', err);
+        alert('Error creating trade: ' + err.message);
+      });
+  } else {
+    this.showValidationErrors();
+  }
+}
 
   private showValidationErrors() {
     const errors: string[] = [];
@@ -68,24 +121,13 @@ export class AddTradeDialogComponent {
     }
     if (controls['type'].hasError('required')) {
       errors.push('Type is required.');
-    } else if (controls['type'].hasError('pattern')) {
-      errors.push('Type must be one of the following: INSERT, UPDATE, CANCEL.');
     }
     if (controls['action'].hasError('required')) {
       errors.push('Action is required.');
-    } else if (controls['action'].hasError('pattern')) {
-      errors.push('Action must be either BUY or SELL.');
     }
 
     if (errors.length > 0) {
       alert('Validation Errors:\n' + errors.join('\n'));
-    }
-  }
-
-  onActionChange($event: { value: string }) {
-    console.log('onActionChange', $event);
-    if ($event.value === 'INSERT') {
-      this.tradeForm.patchValue({ type: 'BUY' });
     }
   }
 }

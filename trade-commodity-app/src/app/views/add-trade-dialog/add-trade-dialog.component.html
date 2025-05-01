@@ -17,7 +17,7 @@
 
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
       <mat-label>Action</mat-label>
-      <mat-select formControlName="action" required (selectionChange)="onActionChange($event.value)">
+      <mat-select formControlName="action" required (selectionChange)="enableDisableFields($event.value)">
         <mat-option value="INSERT">INSERT</mat-option>
         <mat-option value="UPDATE">UPDATE</mat-option>
         <mat-option value="CANCEL">CANCEL</mat-option>

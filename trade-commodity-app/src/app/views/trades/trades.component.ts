@@ -15,7 +15,7 @@ import { AddTradeDialogComponent } from '../add-trade-dialog/add-trade-dialog.co
   styleUrls: ['./trades.component.scss']
 })
 export class TradesComponent implements OnInit {
-  displayedColumns: string[] = ['transactionId', 'tradeId', 'tradeVersionId', 'commodity', 'quantity', 'action', 'type'];
+  displayedColumns: string[] = ['transactionId', 'tradeId', 'tradeVersionId', 'commodity', 'quantity', 'action', 'type', 'nextAction'];
   dataSource = new MatTableDataSource<TradeModel>();
   isLoading = true;
 
@@ -48,14 +48,15 @@ export class TradesComponent implements OnInit {
 
 
 
-openAddTradeDialog() {
+openAddTradeDialog(trade?: TradeModel, action?: string) {
   const dialogRef = this.dialog.open(AddTradeDialogComponent, {
     width: '400px',
+    data: { trade, action }
   });
 
   dialogRef.afterClosed().subscribe((result) => {
     if (result) {
-      this.fetchTrades(); // Reload the trade list after adding
+      this.fetchTrades(); // Reload the trade list after adding or updating
     }
   });
 }
@@ -64,14 +65,18 @@ openAddTradeDialog() {
 
 
 cancelTrade(trade: TradeModel) {
-  this.fetchTrades();
+  this.openAddTradeDialog(trade,'CANCEL') ;
 }
 
 updateTrade(trade: TradeModel) {
-  this.fetchTrades();
+  this.openAddTradeDialog(trade,'UPDATE') ;
 }
 
 
+insertTrade() {
+  const trade = {} as TradeModel;
+  this.openAddTradeDialog(trade,'INSERT') ;
+}
 
 getActionClass(action: string): string {
   switch (action) {

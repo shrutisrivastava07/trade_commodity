@@ -49,37 +49,17 @@
                 </span>
             </td>
         </ng-container>
-        <!-- <ng-container matColumnDef="action">
+        <ng-container matColumnDef="nextAction">
             <th mat-header-cell *matHeaderCellDef class="mat-column-flex"> Next Action </th>
             <td mat-cell *matCellDef="let trade" class="mat-column-flex">
-                <button mat-button color="primary" (click)=updateTrade(trade)>Update</button>
+            <div *ngIf="trade.showUpdate">
+                <button mat-button color="primary" (click)="updateTrade(trade)">Update</button>
+            </div>
+            <div *ngIf="trade.showCancel">
                 <button mat-button color="warn" (click)="cancelTrade(trade)">Cancel</button>
+            </div>
             </td>
-        </ng-container> -->
-
-        <!-- <ng-container matColumnDef="price"></ng-container>
-            <th mat-header-cell *matHeaderCellDef class="mat-column-flex"> Price </th>
-            <td mat-cell *matCellDef="let trade" class="mat-column-flex"> ₹{{trade.price}} </td>
         </ng-container>
-
-        <ng-container matColumnDef="counterparty">
-            <th mat-header-cell *matHeaderCellDef class="mat-column-flex"> Counterparty </th>
-            <td mat-cell *matCellDef="let trade" class="mat-column-flex"> {{trade.counterparty}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="totalPrice">
-            <th mat-header-cell *matHeaderCellDef class="mat-column-flex"> Total Price </th>
-            <td mat-cell *matCellDef="let trade" class="mat-column-flex"> ₹{{trade.totalPrice}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef class="mat-column-flex"> Status </th>
-            <td mat-cell *matCellDef="let trade" class="mat-column-flex">
-                <span [ngClass]="trade.status.toLowerCase()" class="status-pill">
-                    {{trade.status}}
-                </span>
-            </td>
-        </ng-container> -->
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -87,7 +67,7 @@
     </table>
 
     <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
-    <button mat-fab color="accent" class="add-button" (click)="openAddTradeDialog()">
+    <button mat-fab color="accent" class="add-button" (click)="insertTrade()">
         <mat-icon>add</mat-icon>
     </button>
 </div>

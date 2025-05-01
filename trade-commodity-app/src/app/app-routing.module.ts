@@ -5,6 +5,7 @@ import { CommodityListComponent } from './views/commodity-list/commodity-list.co
 
 const routes: Routes = [
 
+  // {path: '/', component: TradesComponent},
   {path: 'trades', component: TradesComponent},
   
   {path: 'commodities', component: CommodityListComponent}
