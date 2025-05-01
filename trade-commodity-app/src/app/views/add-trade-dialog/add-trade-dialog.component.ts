@@ -99,8 +99,8 @@ onSubmit() {
         this.dialogRef.close();
       })
       .catch((err) => {
-        console.error('Error creating trade:', err);
-        alert('Error creating trade: ' + err.message);
+        console.error('Error creating trade:', err.message);
+        alert('Error creating/updating trade:' + err.message);
       });
   } else {
     this.showValidationErrors();

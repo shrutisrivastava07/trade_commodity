@@ -55,9 +55,9 @@ openAddTradeDialog(trade?: TradeModel, action?: string) {
   });
 
   dialogRef.afterClosed().subscribe((result) => {
-    if (result) {
+   // if (result) {
       this.fetchTrades(); // Reload the trade list after adding or updating
-    }
+  //  }
   });
 }
 

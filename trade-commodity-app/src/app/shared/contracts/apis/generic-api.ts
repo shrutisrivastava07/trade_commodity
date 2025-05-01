@@ -46,6 +46,7 @@ export class GenericApi<TModel> implements IApi<TModel> {
     return this.http.post<ServerDataModel<TModel>>(url, model, { headers: this.getHeaders() })
       .toPromise()
       .then((response) => {
+        console.log("response", response);
         if (!response.isSuccess) {
           return this.handleError(response.message || response.code || response.error || 'failed');
         }
@@ -88,7 +89,7 @@ export class GenericApi<TModel> implements IApi<TModel> {
 
   private handleError(error: any): Promise<any> {
     // console.log('error', error)
-    console.log(error);
+    console.log('HandleError ',error);
     if (error.status === 0) {
       return Promise.reject('There is no internet connection')
     };
@@ -111,7 +112,7 @@ export class GenericApi<TModel> implements IApi<TModel> {
           localStorage.clear();
           window.location.href = '/';
       }
-      return Promise.reject(error.statusText);
+      return Promise.reject(error.error); // backend is seding error message wrapped in another error variable
     }
 
     // if (error.status === 408) {
@@ -122,7 +123,7 @@ export class GenericApi<TModel> implements IApi<TModel> {
     //   localStorage.clear();
     //   window.location.href = '/';
     // }
-    return Promise.reject(error.message || error);
+    return Promise.reject(error);
   }
 
   private getQueryParams(input: ServerPageInput): HttpParams {
