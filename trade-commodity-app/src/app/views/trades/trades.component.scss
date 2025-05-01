@@ -42,3 +42,38 @@
     z-index: 1000;
   }
   
+
+  /* filepath: d:\Personal\Shruti\PersonalRepository\trade_commodity\trade-commodity-app\src\app\views\trades\trades.component.scss */
+
+/* Action Styles */
+/* filepath: d:\Personal\Shruti\PersonalRepository\trade_commodity\trade-commodity-app\src\app\views\trades\trades.component.scss */
+
+/* Action text colors */
+.action-text {
+  font-weight: bold;
+}
+
+.action-insert {
+  color: #4caf50; /* Green for INSERT */
+}
+
+.action-update {
+  color: #ff9800; /* Orange for UPDATE */
+}
+
+.action-delete {
+  color: #f44336; /* Red for DELETE */
+}
+
+/* Type text colors */
+.type-text {
+  font-weight: bold;
+}
+
+.type-buy {
+  color: #0c6b0f; /* Green for BUY */
+}
+
+.type-sell {
+  color: #3d0d09; /* Red for SELL */
+}

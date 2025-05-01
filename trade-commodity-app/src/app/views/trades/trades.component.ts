@@ -8,15 +8,6 @@ import { TradesService } from 'src/app/controllers/trades.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddTradeDialogComponent } from '../add-trade-dialog/add-trade-dialog.component';
 
-interface Trade {
-  id: number;
-  commodity: string;
-  quantity: number;
-  price: number;
-  counterparty: string;
-  totalPrice: number;
-  status: 'Settled' | 'Placed' | 'Expired';
-}
 
 @Component({
   selector: 'app-trades',
@@ -24,7 +15,7 @@ interface Trade {
   styleUrls: ['./trades.component.scss']
 })
 export class TradesComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'commodity', 'quantity', 'price', 'counterparty', 'totalPrice', 'status'];
+  displayedColumns: string[] = ['transactionId', 'tradeId', 'tradeVersionId', 'commodity', 'quantity', 'action', 'type'];
   dataSource = new MatTableDataSource<TradeModel>();
   isLoading = true;
 
@@ -68,9 +59,44 @@ openAddTradeDialog() {
     }
   });
 }
+
+
+
+
+cancelTrade(trade: TradeModel) {
+  this.fetchTrades();
+}
+
+updateTrade(trade: TradeModel) {
+  this.fetchTrades();
 }
 
 
+
+getActionClass(action: string): string {
+  switch (action) {
+    case 'INSERT':
+      return 'action-insert';
+    case 'UPDATE':
+      return 'action-update';
+    case 'DELETE':
+      return 'action-delete';
+    default:
+      return '';
+  }
+}
+
+getTypeClass(type: string): string {
+  switch (type) {
+    case 'BUY':
+      return 'type-buy';
+    case 'SELL':
+      return 'type-sell';
+    default:
+      return '';
+  }
+}
+}
 // const tradeData: TradeModel[] = [
 //   {
 //     id: 1,

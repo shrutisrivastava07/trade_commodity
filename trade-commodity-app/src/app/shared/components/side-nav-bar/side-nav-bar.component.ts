@@ -8,12 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SideNavBarComponent implements OnInit {
   menuItems = [
-    { icon: 'dashboard', label: 'Dashboard', route: '/' },
-    { icon: 'person', label: 'Trades', route: '/trades' },
-    { icon: 'settings', label: 'Settings', route: '/settings' }
+     { icon: 'dashboard', label: 'Dashboard', route: '/' },
+    { icon: 'trades', label: 'Trades', route: '/trades' },
+    { icon: 'settings', label: 'Commoditites', route: '/commodities' }
   ];
 
-    constructor() { }
+    constructor() { 
+      
+    }
 
   ngOnInit(): void {
   }

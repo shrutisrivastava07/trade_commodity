@@ -3,7 +3,11 @@
   <div class="form-fields">
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
       <mat-label>Commodity</mat-label>
-      <input matInput formControlName="commodity" required />
+      <mat-select formControlName="commodity" required>
+        <mat-option *ngFor="let commodity of commodities" [value]="commodity">
+          {{ commodity.code }}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
@@ -12,20 +16,19 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
-      <mat-label>Price</mat-label>
-      <input matInput type="number" formControlName="price" required />
+      <mat-label>Action</mat-label>
+      <mat-select formControlName="action" required (selectionChange)="onActionChange($event.value)">
+        <mat-option value="INSERT">INSERT</mat-option>
+        <mat-option value="UPDATE">UPDATE</mat-option>
+        <mat-option value="CANCEL">CANCEL</mat-option>
+      </mat-select>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
-      <mat-label>Counterparty</mat-label>
-      <input matInput formControlName="counterparty" required />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width" floatLabel="always">
-      <mat-label>Status</mat-label>
-      <mat-select formControlName="status" required>
-        <mat-option value="Pending">Pending</mat-option>
-        <mat-option value="Completed">Completed</mat-option>
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type" required>
+        <mat-option value="BUY">Buy</mat-option>
+        <mat-option value="SELL">Sell</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
