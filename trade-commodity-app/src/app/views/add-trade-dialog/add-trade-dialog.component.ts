@@ -1,6 +1,7 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CommodityService } from 'src/app/controllers/commodity.service';
 import { TradesService } from 'src/app/controllers/trades.service';
 import { TradeModel } from 'src/app/models/trade.model';
 
@@ -28,6 +29,7 @@ export class AddTradeDialogComponent implements OnInit {
       private fb: FormBuilder,
       public dialogRef: MatDialogRef<AddTradeDialogComponent>,
       private tradeServices: TradesService,
+      private commodityService: CommodityService,
       @Inject(MAT_DIALOG_DATA) public data: any,
      
   ) {
@@ -44,9 +46,31 @@ export class AddTradeDialogComponent implements OnInit {
     if (this.data.trade) {
       this.trade = this.data.trade;
       console.log('Trade:', this.trade);
+      this.fetchCommodities() 
       this.loadTradeDetails(this.trade);
       this.enableDisableFields(this.data.action);
     }
+  }
+  fetchCommodities() {
+    //this.dataSource.data = tradeData;
+   
+    this.commodityService.api.getAll({ query: {} } as any)
+      .then((data) => {
+        console.log(data); // Check the structure of data to ensure it contains boardingUpdates
+         const commodityList= data.items!; // Adjust this line based on the actual structure of your data
+         this.commodities = commodityList
+          .map((item: any) => ({
+          id: item.id,
+          code: item.code,
+          }))
+          .sort((a, b) => a.code.localeCompare(b.code));
+        console.log('Commodities:', this.commodities);
+         
+      })
+      .catch((error) => {
+        console.error('Error fetching trades:', error);
+       
+      });
   }
 
   enableDisableFields(action: string) {
@@ -84,9 +108,8 @@ onSubmit() {
       ...this.tradeForm.value,
       action: this.data.action,
       tradeId: this.trade.tradeId,
-     transactionId: this.trade.transactionId,
-     tradeVersionId: this.trade.tradeVersionId,
-     // totalPrice: this.tradeForm.value.quantity * this.tradeForm.value.price,
+      transactionId: this.trade.transactionId,
+      tradeVersionId: this.trade.tradeVersionId,
     };
     console.log('trade', this.trade);
     console.log('tradeID', this.trade.tradeId);
@@ -95,8 +118,16 @@ onSubmit() {
       .create(updateTrade)
       .then((val) => {
         console.log('val', val);
-        alert('Trade created successfully');
-        this.dialogRef.close();
+        let successMessage = '';
+        if (this.data.action === 'UPDATE') {
+          successMessage = 'Trade updated successfully';
+        } else if (this.data.action === 'CANCEL') {
+          successMessage = 'Trade cancelled successfully';
+        } else {
+          successMessage = 'Trade created successfully';
+        }
+        alert(successMessage);
+        this.dialogRef.close(true); // Pass a value to indicate success
       })
       .catch((err) => {
         console.error('Error creating trade:', err.message);

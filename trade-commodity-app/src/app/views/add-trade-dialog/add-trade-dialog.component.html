@@ -1,4 +1,4 @@
-<h2 mat-dialog-title class="dialog-title">Add Trade</h2>
+<h2 mat-dialog-title class="dialog-title">Add/Update Trade</h2>
 <form [formGroup]="tradeForm" (ngSubmit)="onSubmit()" class="trade-form">
   <div class="form-fields">
     <mat-form-field appearance="outline" class="full-width" floatLabel="always">
@@ -35,6 +35,13 @@
 
   <div mat-dialog-actions align="end" class="dialog-actions">
     <button mat-button mat-dialog-close class="cancel-button">Cancel</button>
-    <button mat-flat-button color="primary" type="submit" [disabled]="tradeForm.invalid" class="add-button">Add</button>
+    <button 
+      mat-flat-button 
+      color="primary" 
+      type="submit" 
+      [disabled]="tradeForm.invalid" 
+      class="add-button">
+      {{ tradeForm.get('action')?.value === 'UPDATE' ? 'Update' : (tradeForm.get('action')?.value === 'CANCEL' ? 'Cancel Trade' : 'Add') }}
+    </button>
   </div>
 </form>
